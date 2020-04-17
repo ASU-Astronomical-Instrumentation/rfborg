@@ -1,72 +1,34 @@
 # DO NOT RUN PROJECT UNTIL THIS IS EDITED OR REMOVED (04/16/20)
 # Take From https://github.com/docker/compose/blob/master/Dockerfile 
-ARG DOCKER_VERSION=19.03.5
-ARG PYTHON_VERSION=3.7.6
-ARG BUILD_ALPINE_VERSION=3.11
-ARG BUILD_DEBIAN_VERSION=slim-stretch
-ARG RUNTIME_ALPINE_VERSION=3.11.3
-ARG RUNTIME_DEBIAN_VERSION=stretch-20191224-slim
+# https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+FROM ubuntu:18.04
 
-ARG BUILD_PLATFORM=alpine
 
-FROM docker:${DOCKER_VERSION} AS docker-cli
+RUN apt-get update && apt-get install -y python3 python3-pip \
+    build-essential software-properties-common byobu curl git htop man unzip vim wget && \
+    cd /tmp && \
+    wget http://download.redis.io/redis-stable.tar.gz && \
+    tar xvzf redis-stable.tar.gz && \
+    cd redis-stable && \
+    make && \
+    make install && \
+    cp -f src/redis-sentinel /usr/local/bin && \
+    mkdir -p /etc/redis && mkdir /data && \
+    cp -f *.conf /etc/redis && \
+    rm -rf /tmp/redis-stable* && \
+    sed -i 's/^\(bind .*\)$/# \1/' /etc/redis/redis.conf && \
+    sed -i 's/^\(daemonize .*\)$/# \1/' /etc/redis/redis.conf && \
+    sed -i 's/^\(dir .*\)$/# \1\ndir \/data/' /etc/redis/redis.conf && \
+    sed -i 's/^\(logfile .*\)$/# \1/' /etc/redis/redis.conf
 
-FROM python:${PYTHON_VERSION}-alpine${BUILD_ALPINE_VERSION} AS build-alpine
-RUN apk add --no-cache \
-    bash \
-    build-base \
-    ca-certificates \
-    curl \
-    gcc \
-    git \
-    libc-dev \
-    libffi-dev \
-    libgcc \
-    make \
-    musl-dev \
-    openssl \
-    openssl-dev \
-    python2 \
-    python2-dev \
-    zlib-dev
-ENV BUILD_BOOTLOADER=1
-
-FROM python:${PYTHON_VERSION}-${BUILD_DEBIAN_VERSION} AS build-debian
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    curl \
-    gcc \
-    git \
-    libc-dev \
-    libffi-dev \
-    libgcc-6-dev \
-    libssl-dev \
-    make \
-    openssl \
-    python2.7-dev \
-    zlib1g-dev
-
-FROM build-${BUILD_PLATFORM} AS build
-COPY docker-compose-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["sh", "/usr/local/bin/docker-compose-entrypoint.sh"]
-COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
-WORKDIR /code/
+VOLUME /code
+WORKDIR /code
 
 COPY requirements.txt .
-COPY requirements-dev.txt .
-COPY .pre-commit-config.yaml .
-COPY tox.ini .
-COPY setup.py .
-COPY README.md .
-COPY compose compose/
-COPY . .
-ARG GIT_COMMIT=unknown
-ENV DOCKER_COMPOSE_GITSHA=$GIT_COMMIT
-RUN script/build/linux-entrypoint
+RUN pip3 install -r requirements.txt 
 
-FROM alpine:${RUNTIME_ALPINE_VERSION} AS runtime-alpine
-FROM debian:${RUNTIME_DEBIAN_VERSION} AS runtime-debian
-FROM runtime-${BUILD_PLATFORM} AS runtime
-COPY docker-compose-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["sh", "/usr/local/bin/docker-compose-entrypoint.sh"]
-COPY --from=docker-cli  /usr/local/bin/docker           /usr/local/bin/docker
-COPY --from=build       /usr/local/bin/docker-compose   /usr/local/bin/docker-compose
+COPY . .
+
+EXPOSE 6379
+
+
