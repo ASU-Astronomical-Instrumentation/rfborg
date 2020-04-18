@@ -2,3 +2,5 @@ numpy
 matplotlib 
 redis 
 scipy
+tornado
+ipython
