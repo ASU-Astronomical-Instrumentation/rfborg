@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 
 
 RUN apt-get update && apt-get install -y python3 python3-pip \
-    build-essential software-properties-common byobu curl git htop man unzip vim wget && \
+    build-essential software-properties-common byobu curl git htop man unzip vim wget iputils-ping && \
     cd /tmp && \
     wget http://download.redis.io/redis-stable.tar.gz && \
     tar xvzf redis-stable.tar.gz && \
@@ -24,10 +24,11 @@ RUN apt-get update && apt-get install -y python3 python3-pip \
 VOLUME /code
 WORKDIR /code
 
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt 
-
 COPY . .
+RUN pip3 install -r requirements.txt && \ 
+    mkdir ~/.config/ && mkdir ~/.config/matplotlib/ && \
+    cp matplotlibrc ~/.config/matplotlib/ && \
+    echo 'export MATPLOTLIBRC=~/.config/matplotlib/matplotlibrc' >> ~/.bashrc 
 
 EXPOSE 6379
 
