@@ -4,3 +4,4 @@ redis
 scipy
 tornado
 ipython
+rich
