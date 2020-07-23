@@ -4,6 +4,7 @@ system then executing the command sent, using PUBSUB
 
 """
 import sys
+import subprocess
 import redis 
 import json
 import somefirmware.somefirmware as foo 
@@ -11,7 +12,7 @@ from time import sleep
 
 if sys.version_info < (3,7): #checking for python version...
 	sys.exit("Please use Python >=3.7")
-
+subprocess.run("clear")
 print(50*"=",end="\n")
 print("Starting Programme...")
 print(50*"=",end="\n\n")
@@ -40,8 +41,10 @@ print(f"Subscribing to \'{chnl}\'...")
 r = redis.Redis()
 p = r.pubsub(ignore_subscribe_messages=True)
 p.subscribe(chnl) 
-print(f"Subscribed to \'{chnl}\'...")
-print("Ready to Recieve Messages.\n")
+print(f"Subscribed to \'{chnl}\'.\n")
+
+animation = "|/-\\"
+i=0
 while True:
     msg = p.get_message()
     if msg:
@@ -52,8 +55,12 @@ while True:
         elif hasattr(foo,command_dict[cmd]):
             print(f"Running \'{command_dict[cmd]}\' Command.\n")
             getattr(foo,command_dict[cmd])()
+            print("")
         else:
             print("Invalid Command Entered")
-    sleep(0.001)
+    sleep(0.1)
+    sys.stdout.write("\rReady to Recieve Messages. " + animation[i%4])
+    sys.stdout.flush()
+    i+=1
 p.close()
 print("Exiting.")
