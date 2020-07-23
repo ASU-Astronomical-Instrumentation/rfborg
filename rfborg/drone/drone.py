@@ -9,6 +9,9 @@ import json
 import somefirmware.somefirmware as foo 
 from time import sleep
 
+if sys.version_info < (3,7):
+	sys.exit("Please use Python >=3.7")
+
 print(50*"=",end="\n")
 print("Starting Programme...")
 print(50*"=",end="\n\n")
