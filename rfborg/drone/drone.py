@@ -9,7 +9,7 @@ import json
 import somefirmware.somefirmware as foo 
 from time import sleep
 
-if sys.version_info < (3,7):
+if sys.version_info < (3,7): #checking for python version...
 	sys.exit("Please use Python >=3.7")
 
 print(50*"=",end="\n")
