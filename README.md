@@ -41,7 +41,7 @@ docker exec -it redis_container redis-cli
 Python:
 Type python3
 Run script contained in Dockerfile python3 script.py
-Note: script.py must be in Docker container (or manually input) 
+Note: script.py must be in Docker container (or manually input). It is possible to copy a file from the host computer into a docker container (i.e. a user can run there own script from a docker container). docker cp script.py redis_container:path/script.py 
 
 
 You can connect to another container.  
