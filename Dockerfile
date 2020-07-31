@@ -32,4 +32,5 @@ RUN pip3 install -r requirements.txt && \
 
 EXPOSE 6379
 
-
+# Should run redis server in detach mode
+CMD ["redis-server","--protected-mode no"]
