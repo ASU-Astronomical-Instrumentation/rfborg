@@ -7,11 +7,13 @@ import sys
 import json
 from time import sleep
 import fun as foo
+import subprocess
+
 
 # PART 1 ##################################################
 # load firmware config
 # lambda method use for general purpose firmware loading
-f = "fun" # can be a user input
+f="fun" # can be a user input
 jsonpath= lambda name : "./"  + name + ".json"
 cmdpath = lambda name : "./"  + name + ".py"
 
@@ -20,12 +22,13 @@ with open(jsonpath(f),'r') as cmdlist:
     command_obj=cmdlist.read()
 command_dict=json.loads(command_obj)
 
+
 #######################################################################
 #Redis Connection######################################################
 #######################################################################
 
-r = redis.Redis(host = 'localhost') #replace 'localhost' with desired ip address
-p = r.pubsub(ignore_subscribe_message = True)
+r = redis.Redis(host = '10.153.40.1') #replace 'localhost' with desired ip address
+p = r.pubsub(ignore_subscribe_messages = True)
 
 ####################################################################
 #Connect to redis channel###########################################
