@@ -1,7 +1,6 @@
 """
 Demonstration of Interfacing a remote redis-cli to a local 
 system then executing the command sent, using PUBSUB
-
 """
 import sys
 import subprocess

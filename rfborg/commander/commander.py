@@ -88,4 +88,5 @@ def usrInput():
         except ValueError:
             print("Invalid input")
     print("Exiting Commander")
+
 usrInput()
