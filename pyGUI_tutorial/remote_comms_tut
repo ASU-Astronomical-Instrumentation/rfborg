@@ -1,0 +1,15 @@
+How to send python commands to RFSoc:
+Connect host computer to rfsoc over ethernet cable
+Choose an IP address for ethernet port on host computer that is of the same nature of RFSoC IP address but different final number
+make sure address is set to Manual IPv4 and has a netmask that matches that of the RFSoC
+on host computer, find redis.conf file in redis folder and edit IP bind to the IP of the ethernet port
+You might have to comment out a bunch of bullshit, just listen to the errors 
+Run 'redis-server ./redis.conf' from directory with the configuration file
+IN a terminal from host computer, ssh into RFSoC and enter the rfborgcom folder and locate drone.py
+Edit the drone.py file so that the redis server is set to the IP address of the host computer 
+On Host computer, find commander.py file and edit so that it is bound to tthe IP address of the Redis server
+From the RFSoC terminal, run drone.py
+From host terminal, run commander.py
+Pray
+Choose corrent channel (at this time, python-channel)
+Send commands
