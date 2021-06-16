@@ -1,0 +1,12 @@
+{
+"00" : "sayHi",
+"01" : "count",
+"10" : "eig",
+"11" : { 
+    "saySomething" : {
+        "a" : "this",
+        "b" : "is the",
+        "c" : "default settings"
+        }
+    }
+}
