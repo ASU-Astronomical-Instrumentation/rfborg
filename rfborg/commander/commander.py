@@ -95,12 +95,20 @@ def userInput():
                         elif command in command_dict.keys(): 
                             print(f"Sending \'{command_dict[command]}\' Command.\n")
                             # TODO : Add function params
+
+                            
+
                             r.publish(drone,command)
                             print("Sent")
+                            count=0                            
                             while True:
                                 msg = p.get_message()
                                 if msg:
                                     print(msg['data'].decode())
+                                    break
+                                count+=1
+                                if count==1000:
+                                    print("Time Out.")
                                     break
                         else:
                             print("Invalid command.")
@@ -120,5 +128,5 @@ def userInput():
     print("Exiting Commander")
 
 
-if __main__ == main():
+if __name__ == "__main__":
     userInput()
