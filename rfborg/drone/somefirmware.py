@@ -1,12 +1,13 @@
 def sayHi():
-    print("Hi!")
+    print("\tHi!")
 
 def sayBye():
-    print("Bye!")
+    print("\tBye!")
 
 def count():
+    print("Starting Count...")
     for i in range(10):
-        print(bin(i))
+        print("\t" + bin(i))
 
 def eig():
-    print("Diagonalize the matrix!")
+    print("\tDiagonalize the matrix!")

@@ -7,7 +7,7 @@ import sys
 import subprocess
 import redis 
 import json
-import somefirmware.somefirmware as foo 
+import somefirmware as foo 
 from time import sleep
 
 if sys.version_info < (3,7): #checking for python version...
@@ -20,8 +20,8 @@ print(50*"=",end="\n\n")
 # load firmware config
 # lambda method use for general purpose firmware loading
 f="somefirmware" # can be a user input
-jsonpath= lambda name : "./" + name + "/" + name + ".json"
-cmdpath = lambda name : "./" + name + "/" + name + ".py"
+jsonpath= lambda name : "./"  + name + ".json"
+cmdpath = lambda name : "./"  + name + ".py"
 
 # Reading JSON File
 with open(jsonpath(f),'r') as cmdlist:
