@@ -6,7 +6,7 @@ system then executing the command sent, using PUBSUB
 import sys
 import subprocess
 import redis 
-import json
+import csv
 import somefirmware.somefirmware as foo 
 from time import sleep
 
@@ -20,13 +20,12 @@ print(50*"=",end="\n\n")
 # load firmware config
 # lambda method use for general purpose firmware loading
 f="somefirmware" # can be a user input
-jsonpath= lambda name : "./" + name + "/" + name + ".json"
 cmdpath = lambda name : "./" + name + "/" + name + ".py"
 
-# Reading JSON File
-with open(jsonpath(f),'r') as cmdlist:
-    command_obj=cmdlist.read()
-command_dict=json.loads(command_obj)
+# Reading CSV File
+with open('somefirmware.csv', newline = '') as csvfile:
+        file_reader = csv.reader(csvfile, delimiter = ',')	#reads csv file
+        command_dict = {rows[0]:rows[1] for rows in file_reader} #adds csv file contents to dictionary
 
 print("Command List:")
 print(35*"-")
